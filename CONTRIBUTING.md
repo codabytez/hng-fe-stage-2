@@ -4,21 +4,21 @@
 
 ### Main Branches
 
-| Branch | Purpose |
-|---|---|
-| `main` | Production — protected, requires 2 approvals |
+| Branch    | Purpose                                                 |
+| --------- | ------------------------------------------------------- |
+| `main`    | Production — protected, requires 2 approvals            |
 | `staging` | Pre-production testing — protected, requires 1 approval |
-| `dev` | Active development — protected, status checks required |
+| `dev`     | Active development — protected, status checks required  |
 
 ### Working Branches
 
-| Prefix | Use for |
-|---|---|
-| `feature/*` | New features |
-| `fix/*` | Bug fixes |
-| `hotfix/*` | Urgent production fixes |
-| `chore/*` | Maintenance / dependency updates |
-| `docs/*` | Documentation only changes |
+| Prefix      | Use for                          |
+| ----------- | -------------------------------- |
+| `feature/*` | New features                     |
+| `fix/*`     | Bug fixes                        |
+| `hotfix/*`  | Urgent production fixes          |
+| `chore/*`   | Maintenance / dependency updates |
+| `docs/*`    | Documentation only changes       |
 
 ---
 
@@ -54,17 +54,18 @@ git push origin feature/your-feature-name
 <type>: <short description>
 ```
 
-| Type | When to use |
-|---|---|
-| `feat` | New feature |
-| `fix` | Bug fix |
+| Type       | When to use                              |
+| ---------- | ---------------------------------------- |
+| `feat`     | New feature                              |
+| `fix`      | Bug fix                                  |
 | `refactor` | Code change that is not a feature or fix |
-| `style` | UI / styling changes |
-| `docs` | Documentation only |
-| `chore` | Maintenance, deps, config |
-| `test` | Adding or updating tests |
+| `style`    | UI / styling changes                     |
+| `docs`     | Documentation only                       |
+| `chore`    | Maintenance, deps, config                |
+| `test`     | Adding or updating tests                 |
 
 **Examples:**
+
 ```
 feat: add user profile page
 fix: correct date formatting on dashboard
@@ -79,13 +80,17 @@ docs: update contributing guide
 This project uses [Husky](https://typicode.github.io/husky/) to enforce quality automatically.
 
 ### Pre-commit
+
 Runs on every `git commit`:
+
 - Prettier format check (auto-stages fixes if found)
 - ESLint + Prettier via lint-staged (only on staged files)
 - TypeScript type check
 
 ### Pre-push
+
 Runs on every `git push`:
+
 - Full `next build` — push is blocked if the build fails
 
 If a hook blocks you, fix the issue it reports and try again. **Do not bypass hooks with `--no-verify`.**
@@ -114,6 +119,7 @@ Before requesting a review, make sure:
 - [ ] No commented-out code committed
 
 Reviewers will check:
+
 - [ ] Logic correctness
 - [ ] TypeScript types are accurate (no sneaky `as any`)
 - [ ] No unnecessary re-renders or missing `useCallback`/`useMemo`

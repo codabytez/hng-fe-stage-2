@@ -1,28 +1,55 @@
 @import "tailwindcss";
 
+/* Class-based dark mode */
+@variant dark (&:where(.dark, .dark *));
+
 @theme {
   /* ================================
-   * Colors — add your custom palette here
+   * Brand
    * ================================ */
+  --color-primary: #7c5bfa;
+  --color-primary-hover: #9277ff;
 
-  /* --color-primary: #your-color;
-  --color-secondary: #your-color;
-  --color-accent: #your-color;
-  --color-background: #your-color;
-  --color-foreground: #your-color; */
+  /* ================================
+   * Dark surfaces
+   * ================================ */
+  --color-dark-bg: #141625;
+  --color-dark-surface: #1e2139;
+  --color-dark-element: #252945;
+
+  /* ================================
+   * Neutrals
+   * ================================ */
+  --color-lavender: #dfe3fa;
+  --color-muted: #888eb0;
+  --color-muted-light: #7e88c3;
+  --color-ink: #0c0e16;
+
+  /* ================================
+   * Light surfaces
+   * ================================ */
+  --color-light-bg: #f8f8fb;
+
+  /* ================================
+   * Status
+   * ================================ */
+  --color-paid: #33d69f;
+  --color-pending: #ff8f00;
+  --color-draft: #373b53;
+
+  /* ================================
+   * Danger
+   * ================================ */
+  --color-danger: #ec5767;
+  --color-danger-hover: #ff9277;
 
   /* ================================
    * Typography
    * ================================ */
-
-  /* --font-sans: "Inter", sans-serif;
-  --font-mono: "JetBrains Mono", monospace; */
+  --font-sans: "League Spartan", sans-serif;
 
   /* ================================
-   * Spacing / Sizing overrides
+   * Radius
    * ================================ */
-
-  /* --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px; */
+  --radius-invoice: 8px;
 }

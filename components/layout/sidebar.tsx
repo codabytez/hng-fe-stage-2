@@ -1,0 +1,106 @@
+"use client";
+
+import { useTheme } from "@/providers/theme-provider";
+import { Moon, Sun } from "lucide-react";
+
+export function Sidebar() {
+  const { theme, toggle } = useTheme();
+
+  return (
+    <>
+      {/* Desktop sidebar */}
+      <aside className="hidden md:flex fixed left-0 top-0 h-full w-25.75 bg-dark-surface rounded-r-[20px] flex-col items-center z-40 overflow-hidden">
+        {/* Logo */}
+        <div className="w-full aspect-square bg-primary rounded-br-[20px] flex items-center justify-center shrink-0">
+          <LogoIcon />
+        </div>
+
+        {/* Bottom controls */}
+        <div className="mt-auto w-full flex flex-col items-center">
+          <button
+            onClick={toggle}
+            aria-label="Toggle theme"
+            className="p-4 text-muted hover:text-white transition-colors"
+          >
+            {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+          </button>
+
+          <div className="w-full h-px bg-[#494E6E] my-2" />
+
+          <div className="p-4">
+            <div className="w-10 h-10 rounded-full bg-muted-light overflow-hidden">
+              <div className="w-full h-full bg-linear-to-br from-primary to-primary-hover" />
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      {/* Mobile top bar */}
+      <header className="md:hidden fixed top-0 left-0 right-0 h-18 bg-dark-surface z-40 flex items-center justify-between">
+        {/* Logo */}
+        <div className="h-full aspect-square bg-primary rounded-br-[20px] flex items-center justify-center">
+          <LogoIcon />
+        </div>
+
+        <div className="flex items-center gap-4 pr-4">
+          <button
+            onClick={toggle}
+            aria-label="Toggle theme"
+            className="text-muted hover:text-white transition-colors"
+          >
+            {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+          </button>
+
+          <div className="w-px h-8 bg-[#494E6E]" />
+
+          <div className="w-8 h-8 rounded-full overflow-hidden">
+            <div className="w-full h-full bg-linear-to-br from-primary to-primary-hover" />
+          </div>
+        </div>
+      </header>
+    </>
+  );
+}
+
+function LogoIcon() {
+  return (
+    <svg
+      width="103"
+      height="103"
+      viewBox="0 0 103 103"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M0 0H83C94.0457 0 103 8.9543 103 20V83C103 94.0457 94.0457 103 83 103H0V0Z"
+        fill="#7C5DFA"
+      />
+      <mask
+        id="mask0_1_34"
+        style={{ maskType: "luminance" }}
+        maskUnits="userSpaceOnUse"
+        x="0"
+        y="0"
+        width="103"
+        height="103"
+      >
+        <path
+          d="M0 0H83C94.0457 0 103 8.9543 103 20V83C103 94.0457 94.0457 103 83 103H0V0Z"
+          fill="white"
+        />
+      </mask>
+      <g mask="url(#mask0_1_34)">
+        <path
+          d="M103 52H20C8.95431 52 0 60.9543 0 72V135C0 146.046 8.95431 155 20 155H103V52Z"
+          fill="#9277FF"
+        />
+      </g>
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M42.6942 33.2922L52 51.9999L61.3058 33.2922C67.6645 36.6407 72 43.314 72 50.9999C72 62.0456 63.0457 70.9999 52 70.9999C40.9543 70.9999 32 62.0456 32 50.9999C32 43.314 36.3355 36.6407 42.6942 33.2922Z"
+        fill="white"
+      />
+    </svg>
+  );
+}

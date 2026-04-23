@@ -6,121 +6,101 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { authClient } from "@/lib/auth-client";
 import { signUpSchema, type SignUpValues } from "@/lib/validations/auth";
+import { cn } from "@/lib/utils";
+import { LogoMark } from "./logo-mark";
+import { Eye, EyeOff } from "lucide-react";
+import { useState } from "react";
 
 export function SignUpForm() {
   const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
     handleSubmit,
     setError,
     formState: { errors, isSubmitting },
-  } = useForm<SignUpValues>({
-    resolver: zodResolver(signUpSchema),
-  });
+  } = useForm<SignUpValues>({ resolver: zodResolver(signUpSchema) });
 
   async function onSubmit(values: SignUpValues) {
-    const { error } = await authClient.signUp.email(values);
+    const seed = createAvatarSeed(values);
+    const image = `https://api.dicebear.com/9.x/fun-emoji/png?seed=${seed}`;
 
+    const { error } = await authClient.signUp.email({ ...values, image });
     if (error) {
       setError("root", {
         message: error.message ?? "Sign up failed. Please try again.",
       });
       return;
     }
-
     router.push("/");
     router.refresh();
   }
 
   return (
     <div className="w-full max-w-md">
-      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 p-8">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+      <div className="mb-10 flex flex-col items-center gap-4">
+        <LogoMark />
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-ink dark:text-white">
             Create an account
           </h1>
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+          <p className="mt-2 text-sm text-muted">
             Get started managing your invoices
           </p>
         </div>
+      </div>
 
+      <div className="rounded-[8px] bg-white px-8 py-10 shadow-sm dark:bg-dark-surface">
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="space-y-5"
+          className="flex flex-col gap-6"
           noValidate
         >
-          <div>
-            <label
-              htmlFor="name"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5"
-            >
-              Full name
-            </label>
+          <Field label="Full name" error={errors.name?.message}>
             <input
               id="name"
               type="text"
               autoComplete="name"
-              {...register("name")}
-              aria-invalid={!!errors.name}
-              className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3.5 py-2.5 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent aria-invalid:border-red-500 aria-invalid:focus:ring-red-400 transition"
               placeholder="Jane Doe"
+              {...register("name")}
+              className={inputClass(!!errors.name)}
             />
-            {errors.name && (
-              <p role="alert" className="mt-1.5 text-xs text-red-500">
-                {errors.name.message}
-              </p>
-            )}
-          </div>
+          </Field>
 
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5"
-            >
-              Email address
-            </label>
+          <Field label="Email address" error={errors.email?.message}>
             <input
               id="email"
               type="email"
               autoComplete="email"
-              {...register("email")}
-              aria-invalid={!!errors.email}
-              className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3.5 py-2.5 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent aria-invalid:border-red-500 aria-invalid:focus:ring-red-400 transition"
               placeholder="you@example.com"
+              {...register("email")}
+              className={inputClass(!!errors.email)}
             />
-            {errors.email && (
-              <p role="alert" className="mt-1.5 text-xs text-red-500">
-                {errors.email.message}
-              </p>
-            )}
-          </div>
+          </Field>
 
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5"
-            >
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              autoComplete="new-password"
-              {...register("password")}
-              aria-invalid={!!errors.password}
-              className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3.5 py-2.5 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent aria-invalid:border-red-500 aria-invalid:focus:ring-red-400 transition"
-              placeholder="Min. 8 characters"
-            />
-            {errors.password && (
-              <p role="alert" className="mt-1.5 text-xs text-red-500">
-                {errors.password.message}
-              </p>
-            )}
-          </div>
+          <Field label="Password" error={errors.password?.message}>
+            <div className="relative">
+              <input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                autoComplete="new-password"
+                placeholder="Min. 8 characters"
+                {...register("password")}
+                className={cn(inputClass(!!errors.password), "pr-12")}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((v) => !v)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-muted hover:text-ink dark:hover:text-white transition-colors"
+              >
+                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            </div>
+          </Field>
 
           {errors.root && (
-            <p role="alert" className="text-sm text-red-500">
+            <p role="alert" className="text-xs text-danger">
               {errors.root.message}
             </p>
           )}
@@ -128,22 +108,62 @@ export function SignUpForm() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full rounded-lg bg-violet-600 hover:bg-violet-700 disabled:opacity-60 disabled:cursor-not-allowed px-4 py-2.5 text-sm font-semibold text-white transition focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2"
+            className="w-full rounded-full bg-primary py-4 text-sm font-bold text-white transition-colors hover:bg-primary-hover disabled:opacity-60"
           >
-            {isSubmitting ? "Creating account…" : "Create account"}
+            {isSubmitting ? "Creating account…" : "Create Account"}
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
+        <p className="mt-6 text-center text-sm text-muted">
           Already have an account?{" "}
           <Link
             href="/sign-in"
-            className="font-medium text-violet-600 hover:text-violet-700 dark:text-violet-400"
+            className="font-bold text-primary transition-colors hover:text-primary-hover"
           >
             Sign in
           </Link>
         </p>
       </div>
     </div>
+  );
+}
+
+function createAvatarSeed(values: SignUpValues) {
+  return `${values.name}-${values.email}`.trim().toLowerCase();
+}
+
+function Field({
+  label,
+  error,
+  children,
+}: {
+  label: string;
+  error?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex flex-col gap-2">
+      <div className="flex items-center justify-between">
+        <label
+          className={cn(
+            "text-xs",
+            error ? "text-danger" : "text-muted dark:text-muted-light"
+          )}
+        >
+          {label}
+        </label>
+        {error && <span className="text-xs text-danger">{error}</span>}
+      </div>
+      {children}
+    </div>
+  );
+}
+
+function inputClass(hasError: boolean) {
+  return cn(
+    "w-full rounded-sm border px-5 py-4 text-sm font-bold",
+    "text-ink dark:text-white bg-white dark:bg-dark-element",
+    "transition-colors focus:outline-none focus:border-primary",
+    hasError ? "border-danger" : "border-lavender dark:border-dark-element"
   );
 }

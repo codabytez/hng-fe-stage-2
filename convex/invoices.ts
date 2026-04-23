@@ -117,6 +117,19 @@ export const update = mutation({
   },
 });
 
+export const send = mutation({
+  args: { id: v.id("invoices") },
+  handler: async (ctx, { id }) => {
+    const identity = await ctx.auth.getUserIdentity();
+    const userId = requireUser(identity);
+    const invoice = await ctx.db.get(id);
+    if (!invoice || invoice.userId !== userId) throw new Error("Not found");
+    if (invoice.status !== "draft")
+      throw new Error("Only draft invoices can be sent");
+    await ctx.db.patch(id, { status: "pending" });
+  },
+});
+
 export const markAsPaid = mutation({
   args: { id: v.id("invoices") },
   handler: async (ctx, { id }) => {

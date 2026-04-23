@@ -1,15 +1,70 @@
 "use client";
 
 import { useTheme } from "@/providers/theme-provider";
-import { Moon, Sun } from "lucide-react";
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { Moon, Sun, LogOut } from "lucide-react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { authClient } from "@/lib/auth-client";
 
 export function Sidebar() {
   const { theme, toggle } = useTheme();
+  const user = useQuery(api.auth.getCurrentUser);
+  const router = useRouter();
+  const [logoutOpen, setLogoutOpen] = useState(false);
+  const [loggingOut, setLoggingOut] = useState(false);
+
+  async function handleLogout() {
+    setLoggingOut(true);
+    await authClient.signOut();
+    router.push("/sign-in");
+    router.refresh();
+  }
 
   return (
     <>
+      {logoutOpen && (
+        <div className="fixed inset-0 z-60 flex items-center justify-center p-6">
+          <div
+            aria-hidden="true"
+            onClick={() => setLogoutOpen(false)}
+            className="absolute inset-0 bg-black/50"
+          />
+          <div
+            role="dialog"
+            aria-modal="true"
+            className="relative z-10 w-full max-w-120 rounded-[8px] bg-white p-12 dark:bg-dark-element"
+          >
+            <h2 className="mb-3 text-2xl font-bold text-ink dark:text-white">
+              Log Out
+            </h2>
+            <p className="mb-8 text-sm leading-relaxed text-muted">
+              Are you sure you want to log out of your account?
+            </p>
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => setLogoutOpen(false)}
+                disabled={loggingOut}
+                className="rounded-full bg-light-bg px-6 py-4 text-sm font-bold text-muted-light transition-colors hover:bg-lavender disabled:opacity-60 dark:bg-dark-surface dark:hover:bg-dark-bg"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleLogout}
+                disabled={loggingOut}
+                className="rounded-full bg-danger px-6 py-4 text-sm font-bold text-white transition-colors hover:bg-danger-hover disabled:opacity-60"
+              >
+                {loggingOut ? "Logging out…" : "Log Out"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Desktop sidebar */}
-      <aside className="hidden md:flex fixed left-0 top-0 h-full w-25.75 bg-dark-surface rounded-r-[20px] flex-col items-center z-40 overflow-hidden">
+      <aside className="hidden md:flex fixed left-0 top-0 h-full w-25.75 bg-dark-surface rounded-r-[20px] flex-col items-center z-50 overflow-hidden">
         {/* Logo */}
         <div className="w-full aspect-square bg-primary rounded-br-[20px] flex items-center justify-center shrink-0">
           <LogoIcon />
@@ -25,11 +80,29 @@ export function Sidebar() {
             {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
           </button>
 
+          <button
+            onClick={() => setLogoutOpen(true)}
+            aria-label="Log out"
+            className="p-4 text-muted hover:text-danger transition-colors"
+          >
+            <LogOut size={20} />
+          </button>
+
           <div className="w-full h-px bg-[#494E6E] my-2" />
 
           <div className="p-4">
-            <div className="w-10 h-10 rounded-full bg-muted-light overflow-hidden">
-              <div className="w-full h-full bg-linear-to-br from-primary to-primary-hover" />
+            <div className="w-10 h-10 rounded-full bg-dark-element overflow-hidden">
+              {user?.image ? (
+                <Image
+                  src={user.image}
+                  alt="Avatar"
+                  width={40}
+                  height={40}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full bg-linear-to-br from-primary to-primary-hover" />
+              )}
             </div>
           </div>
         </div>
@@ -51,10 +124,28 @@ export function Sidebar() {
             {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
           </button>
 
+          <button
+            onClick={() => setLogoutOpen(true)}
+            aria-label="Log out"
+            className="text-muted hover:text-danger transition-colors"
+          >
+            <LogOut size={20} />
+          </button>
+
           <div className="w-px h-8 bg-[#494E6E]" />
 
-          <div className="w-8 h-8 rounded-full overflow-hidden">
-            <div className="w-full h-full bg-linear-to-br from-primary to-primary-hover" />
+          <div className="w-8 h-8 rounded-full bg-dark-element overflow-hidden">
+            {user?.image ? (
+              <Image
+                src={user.image}
+                alt="Avatar"
+                width={32}
+                height={32}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full bg-linear-to-br from-primary to-primary-hover" />
+            )}
           </div>
         </div>
       </header>
@@ -65,8 +156,8 @@ export function Sidebar() {
 function LogoIcon() {
   return (
     <svg
-      width="103"
-      height="103"
+      width="40"
+      height="40"
       viewBox="0 0 103 103"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

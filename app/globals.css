@@ -53,3 +53,7 @@
    * ================================ */
   --radius-invoice: 8px;
 }
+
+button {
+  cursor: pointer;
+}

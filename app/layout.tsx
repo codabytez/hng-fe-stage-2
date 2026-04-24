@@ -27,7 +27,7 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${leagueSpartan.variable} font-sans bg-light-bg dark:bg-dark-bg text-ink dark:text-white antialiased`}
+        className={`${leagueSpartan.variable} font-sans bg-light-bg dark:bg-dark-bg text-ink dark:text-white antialiased min-w-90`}
       >
         <ConvexClientProvider initialToken={initialToken}>
           <ThemeProvider>

@@ -66,7 +66,7 @@ export function Sidebar() {
       {/* Desktop sidebar */}
       <aside className="hidden md:flex fixed left-0 top-0 h-full w-25.75 bg-dark-surface rounded-r-[20px] flex-col items-center z-50 overflow-hidden">
         {/* Logo */}
-        <div className="w-full aspect-square bg-primary rounded-br-[20px] flex items-center justify-center shrink-0">
+        <div className="w-full aspect-square rounded-br-[20px] flex items-center justify-center shrink-0 overflow-hidden">
           <LogoIcon />
         </div>
 
@@ -111,7 +111,7 @@ export function Sidebar() {
       {/* Mobile top bar */}
       <header className="md:hidden fixed top-0 left-0 right-0 h-18 bg-dark-surface z-40 flex items-center justify-between">
         {/* Logo */}
-        <div className="h-full aspect-square bg-primary rounded-br-[20px] flex items-center justify-center">
+        <div className="h-full aspect-square bg-primary rounded-br-[20px] flex items-center justify-center overflow-hidden">
           <LogoIcon />
         </div>
 
@@ -156,8 +156,8 @@ export function Sidebar() {
 function LogoIcon() {
   return (
     <svg
-      width="40"
-      height="40"
+      width="103"
+      height="103"
       viewBox="0 0 103 103"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -167,7 +167,7 @@ function LogoIcon() {
         fill="#7C5DFA"
       />
       <mask
-        id="mask0_1_34"
+        id="mask0_1_154"
         style={{ maskType: "luminance" }}
         maskUnits="userSpaceOnUse"
         x="0"
@@ -180,7 +180,7 @@ function LogoIcon() {
           fill="white"
         />
       </mask>
-      <g mask="url(#mask0_1_34)">
+      <g mask="url(#mask0_1_154)">
         <path
           d="M103 52H20C8.95431 52 0 60.9543 0 72V135C0 146.046 8.95431 155 20 155H103V52Z"
           fill="#9277FF"
@@ -189,7 +189,7 @@ function LogoIcon() {
       <path
         fillRule="evenodd"
         clipRule="evenodd"
-        d="M42.6942 33.2922L52 51.9999L61.3058 33.2922C67.6645 36.6407 72 43.314 72 50.9999C72 62.0456 63.0457 70.9999 52 70.9999C40.9543 70.9999 32 62.0456 32 50.9999C32 43.314 36.3355 36.6407 42.6942 33.2922Z"
+        d="M42.6942 33.292L52 51.9998L61.3058 33.292C67.6645 36.6406 72 43.3139 72 50.9998C72 62.0454 63.0457 70.9998 52 70.9998C40.9543 70.9998 32 62.0454 32 50.9998C32 43.3139 36.3355 36.6406 42.6942 33.292Z"
         fill="white"
       />
     </svg>

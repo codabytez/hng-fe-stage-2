@@ -37,9 +37,16 @@ export function InvoiceList() {
               Invoices
             </h1>
             <p className="mt-1 text-sm text-muted">
-              {count === 0
-                ? "No invoices"
-                : `There are ${count} total invoice${count !== 1 ? "s" : ""}`}
+              <span className="hidden sm:inline">
+                {count === 0
+                  ? "No invoices"
+                  : `There are ${count} total invoice${count !== 1 ? "s" : ""}`}
+              </span>
+              <span className="sm:hidden">
+                {count === 0
+                  ? "No invoices"
+                  : `${count} invoice${count !== 1 ? "s" : ""}`}
+              </span>
             </p>
           </div>
 
